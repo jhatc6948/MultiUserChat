@@ -17,21 +17,13 @@ public class ServerMain {
                 System.out.println("about to accept client connection...");
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("accepted connection from" + clientSocket);
-                OutputStream outputStream = clientSocket.getOutputStream();
-                for(int i=0;i<10; i++){
-                    outputStream.write(("Time now is " + new Date() + "\n").getBytes());
-                    Thread.sleep(1000);
-
-                }
-
-                clientSocket.close();
+                ServerWorker worker = new ServerWorker(clientSocket);
+                worker.start();
             }
         }catch (IOException e){
-                e.printStackTrace();
-            }catch(InterruptedException e){
             e.printStackTrace();
         }
-        }
-
     }
+
+}
 
