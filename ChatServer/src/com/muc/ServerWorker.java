@@ -1,9 +1,10 @@
 package com.muc;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.*;
 import java.net.Socket;
-import java.util.Date;
+
 
 public class ServerWorker extends Thread {
 
@@ -25,10 +26,24 @@ public class ServerWorker extends Thread {
 
     }
     private void handleClientSocket() throws IOException, InterruptedException {
+        InputStream inputStream = clientSocket.getInputStream();
         OutputStream outputStream = clientSocket.getOutputStream();
-        for(int i=0;i<10; i++){
-            outputStream.write(("Time now is " + new Date() + "\n").getBytes());
-            Thread.sleep(1000);
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String line;
+        while ( (line = reader.readLine()) != null) {
+            String[] tokens = StringUtils.split(line);     //String[] tokens Line.split(" ");
+            if (tokens != null && tokens.length > 0) {
+                String cmd = tokens[0];
+                if ("quit".equalsIgnoreCase(line)) {
+                    break;
+                }else if ("login".equalsIgnoreCase(cmd)){
+                    handleLogin(outputStream, tokens);
+                }else{
+                    String msg = "unknown" + cmd + "\n";
+                    outputStream.write(msg.getBytes());
+                }
+            }
         }
 
         clientSocket.close();
