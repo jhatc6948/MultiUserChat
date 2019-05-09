@@ -16,4 +16,14 @@ User & Server
 
 Commands:
 
-    *log
+    login <user> <password>
+    logoff
+
+    msg <user> body....
+    josh: "msg perry hello world"
+    perry: "msg josh hello world"
+
+    #topic <-- chatroom / group chat
+    join #topic
+    msg #topic body...
+
