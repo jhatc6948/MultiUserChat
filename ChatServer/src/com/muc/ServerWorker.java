@@ -7,12 +7,17 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * serverworker extends thread
+ * allows users to join and leave the server
+ */
 
 public class ServerWorker extends Thread {
 
     private final Socket clientSocket;
     private final Server server;
     private String login = null;
+    private String password = null;
     private OutputStream outputStream;
     private HashSet<String> topicSet = new HashSet<>();
 
@@ -132,7 +137,7 @@ public class ServerWorker extends Thread {
             String password = tokens[2];
 
             if ((login.equals("perry") && password.equals("perry")) || (login.equals("josh") && password.equals("josh")) || (login.equals("kyle") && password.equals("kyle"))){
-                String msg = "ok login \n";
+                String msg = "ok login\n";
                 outputStream.write(msg.getBytes());
                 this.login = login;
                 System.out.println("user logged in successfully " + login);
@@ -159,6 +164,7 @@ public class ServerWorker extends Thread {
             }else{
                 String msg = "error login \n";
                 outputStream.write(msg.getBytes());
+                System.err.println("Login failed for " + login);
             }
         }
     }
